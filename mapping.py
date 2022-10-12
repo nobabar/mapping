@@ -1,8 +1,7 @@
 import numpy as np
 
-SEQUENCE = "^BANANA|"
-
 # suffix array solution
+SEQUENCE = "^BANANA|"
 
 sorted_i_suffix_arrray = sorted(
     range(len(SEQUENCE)), key=lambda i: SEQUENCE[i:])
@@ -13,7 +12,7 @@ last_index = list(map(lambda i: (i + len(SEQUENCE) - 1) %
 last_column = np.array(list(SEQUENCE))[last_index]
 
 
-# Bijective variant
+# David A. Scott's bijective Burrows-Wheeler transform
 
 # allisons.org/ll/AlgDS/Strings/Factors/
 # wikiwand.com/en/Lyndon_word#Duval_algorithm
@@ -79,9 +78,12 @@ def bwts(s):
 def ibwts(s):
     sorted_keys = [x[0] for x in sorted(enumerate(s), key=lambda p: p[1])]
     cycles = find_cycles(sorted_keys)
-    print(cycles)
-    return ''.join([''.join(map(lambda i: s[i], cycle)) for cycle in cycles])
+    return ''.join(map(lambda i: s[i], sum(cycles, [])))
 
 
-output = bwts("banana")
-output = bwts("abacabab")
+if __name__ == "__main__":
+    bwts("banana")
+    bwts("abacabab")
+
+    ibwts(bwts("banana"))
+    ibwts(bwts("abacabab"))
