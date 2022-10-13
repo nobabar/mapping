@@ -109,15 +109,6 @@ def lf_conjugates(s):
     return ret
 
 
-# use infinite lexicographic order to sort the conjugates
-def expend_words(w, l):
-    while len(w) < l:
-        w = w * 2
-        if len(w) > l:
-            w = w[0:l]
-    return w
-
-
 def find_cycles(p):
     visited = set()
     cycles = []
@@ -139,7 +130,6 @@ def find_cycles(p):
 def bwts(s):
     rotations = lf_conjugates(s)
     sorted_rotations = sorted(rotations)
-    # sorted_rotations = sorted(rotations, key=lambda w: expend_words(w, len(s)))
     return ''.join(map(lambda x: x[-1], sorted(sorted_rotations)))
 
 
