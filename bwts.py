@@ -31,6 +31,18 @@ class bwts():
                 ret.append(factor[-idx:] + factor[:-idx])
         return ret
 
+    # def map(self):
+    #     sorted_transformed = np.sort(self.transformed)
+    #     start = np.searchsorted(
+    #         sorted_transformed, self.transformed, side='left')
+    #     cum_sum = cum_sum = np.cumsum(
+    #         self.transformed == self.transformed.reshape(-1, 1), axis=1)
+    #     count_occ = np.diagonal(cum_sum) - 1
+    #     summed = start + count_occ
+    #     sorter = summed.argsort()
+    #     i = np.arange(len(self.transformed))
+    #     return sorter[np.searchsorted(summed, i, sorter=sorter)]
+
     def find_cycles(self):
         visited = set()
         cycles = []
