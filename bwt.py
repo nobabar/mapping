@@ -1,20 +1,22 @@
+import numpy as np
+
+
 class bwt():
     def __init__(self, s):
-        self.s = s
+        self.s = np.array(list(s), dtype=np.unicode_)
         self.matrix = self.calc_matrix()
         self.transformed = self.transform()
         self.count_table, self.alpha = self.count_alpha()
 
     def calc_matrix(self):
-        s = self.s + '$'
-        matrix = []
+        s = np.append(self.s, '$')
+        matrix = np.empty([len(s), len(s)], dtype=np.unicode_)
         for i in range(len(s)):
-            matrix.append(s[i:len(s)] + s[0:i])
-        matrix.sort()
-        return matrix
+            matrix[i] = np.concatenate([s[i:len(s)], s[0:i]])
+        return matrix[matrix[:, 0].argsort()]
 
     def transform(self):
-        return ''.join(map(lambda x: x[-1], self.matrix))
+        return self.matrix[:, -1]
 
     def count_alpha(self):
         count_table = []
@@ -48,5 +50,12 @@ class bwt():
         while x != "$":
             x = self.transformed[p]
             s = x + s
-            p = self.alpha[x] + self.count_table[p]
+            p = self.alpha[self.s[p]] + self.count_table[p]
         return s[1:]
+
+
+if __name__ == "__main__":
+    b = bwt("ACACGACGTTAT")
+    print(b.transformed)
+    print(b.alpha, b.count_table)
+    print(b.inverse())
