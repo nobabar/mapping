@@ -4,12 +4,10 @@ from random import choice
 
 import matplotlib.pyplot as plt
 import numpy as np
-from memory_profiler import profile
 
 # Burrow-Wheeler Transform
 
 
-# @profile
 def generate_bwt(original_seq):
     seq = original_seq + '$'
     matrix = []
@@ -52,7 +50,6 @@ def generate_position(s):
     return pos
 
 
-# @profile
 def gene_seq(bwt):
     (count, alpha) = count_alpha(bwt)
     p = 0
@@ -126,14 +123,12 @@ def find_cycles(p):
     return cycles[::-1]
 
 
-# @profile
 def bwts(s):
     rotations = lf_conjugates(s)
     sorted_rotations = sorted(rotations)
     return ''.join(map(lambda x: x[-1], sorted(sorted_rotations)))
 
 
-# @profile
 def ibwts(s):
     sorted_keys = [x[0] for x in sorted(enumerate(s), key=lambda p: p[1])]
     cycles = find_cycles(sorted_keys)
@@ -173,7 +168,7 @@ if __name__ == "__main__":
 
     mean_mean = (np.mean(times_bwts) + np.mean(times_bwt)) / 2
     max_sd = max(np.std(times_bwts), np.std(times_bwt))
-    myrange = [mean_mean - 4 * max_sd, mean_mean + 4 * max_sd]
+    myrange = (mean_mean - 4 * max_sd, mean_mean + 4 * max_sd)
 
     plt.hist(times_bwt, bins=100, range=myrange,
              alpha=0.5, label='bwt', edgecolor='black')
