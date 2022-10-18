@@ -125,8 +125,7 @@ def find_cycles(p):
 
 def bwts(s):
     rotations = lf_conjugates(s)
-    sorted_rotations = sorted(rotations)
-    return ''.join(map(lambda x: x[-1], sorted(sorted_rotations)))
+    return ''.join(map(lambda x: x[-1], sorted(rotations)))
 
 
 def ibwts(s):
