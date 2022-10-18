@@ -62,18 +62,6 @@ def gene_seq(bwt):
     return seq[1:]
 
 
-# suffix array variant for Burrows-Wheeler Transform
-# SEQUENCE = "^BANANA|"
-
-# sorted_i_suffix_arrray = sorted(
-#     range(len(SEQUENCE)), key=lambda i: SEQUENCE[i:])
-
-# last_index = list(map(lambda i: (i + len(SEQUENCE) - 1) %
-#                   len(SEQUENCE), sorted_i_suffix_arrray))
-
-# last_column = np.array(list(SEQUENCE))[last_index]
-
-
 # David A. Scott's bijective Burrows-Wheeler transform
 
 # allisons.org/ll/AlgDS/Strings/Factors/
