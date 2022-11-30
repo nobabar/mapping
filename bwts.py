@@ -1,10 +1,6 @@
 class bwts():
     def __init__(self, s):
         self.s = s
-        self.transformed = ''.join(map(lambda x: x[-1],
-                                       sorted(self.lf_conjugates())))
-        self.sorted_keys = [x for x in sorted(range(len(self.transformed)),
-                                              key=self.transformed.__getitem__)]
 
     def lf_duval(self):
         i = 0
@@ -31,6 +27,13 @@ class bwts():
                 ret.append(factor[-idx:] + factor[:-idx])
         return ret
 
+    def transform(self):
+        return ''.join(map(lambda x: x[-1], sorted(self.lf_conjugates())))
+
+    def sorted_keys(self):
+        transformed = self.transform()
+        return [x for x in sorted(range(len(transformed)), key=transformed.__getitem__)]
+
     # def map(self):
     #     sorted_transformed = np.sort(self.transformed)
     #     start = np.searchsorted(
@@ -44,16 +47,17 @@ class bwts():
     #     return sorter[np.searchsorted(summed, i, sorter=sorter)]
 
     def find_cycles(self):
+        sorted_keys = self.sorted_keys()
         visited = set()
         cycles = []
-        for i in self.sorted_keys:
+        for i in sorted_keys:
             if i in visited:
                 continue
             path = [i]
-            j = self.sorted_keys[i]
+            j = sorted_keys[i]
             while i != j:
                 path.append(j)
-                j = self.sorted_keys[j]
+                j = sorted_keys[j]
             else:
                 cycles.append(path)
                 visited |= set(path)

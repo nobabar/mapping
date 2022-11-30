@@ -4,9 +4,9 @@ import numpy as np
 class bwt():
     def __init__(self, s):
         self.s = np.array(list(s), dtype=np.unicode_)
-        self.matrix = self.calc_matrix()
-        self.transformed = self.transform()
-        self.count_table, self.alpha = self.count_alpha()
+        self.transformed = []
+        self.count_table = []
+        self.alpha = {}
 
     def calc_matrix(self):
         s = np.append(self.s, '$')
@@ -16,27 +16,27 @@ class bwt():
         return matrix[matrix[:, 0].argsort()]
 
     def transform(self):
-        return self.matrix[:, -1]
+        self.transformed = self.calc_matrix()[:, -1]
+        return self.transformed
 
     def count_alpha(self):
-        count_table = []
-        alpha = {}
         for n in self.transformed:
-            if n not in alpha:
-                alpha[n] = 0
-            count_table.append(alpha[n])
-            alpha[n] += 1
+            if n not in self.alpha:
+                self.alpha[n] = 0
+            self.count_table.append(self.alpha[n])
+            self.alpha[n] += 1
         t = 0
-        for k in sorted(alpha.keys()):
-            tmp = alpha[k]
-            alpha[k] = t
+        for k in sorted(self.alpha.keys()):
+            tmp = self.alpha[k]
+            self.alpha[k] = t
             t += tmp
-        return count_table, alpha
+        return self.count_table, self.alpha
 
     def generate_position(self):
         pos = []
         L = len(self.s)
         p = 0
+
         while len(pos) < len(self.s):
             pos[p] = L - 2
             p = self.alpha[self.s[p]] + self.count_table[p]
@@ -44,6 +44,8 @@ class bwt():
         return pos
 
     def inverse(self):
+        if not self.transformed:
+            self.transform()
         p = 0
         s = "$"
         x = 0
@@ -56,6 +58,8 @@ class bwt():
 
 if __name__ == "__main__":
     b = bwt("ACACGACGTTAT")
+    b.transform()
     print(b.transformed)
+    b.count_alpha()
     print(b.alpha, b.count_table)
     print(b.inverse())
