@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class sabwt():
+class isbwt():
     def __init__(self, s):
         self.s = np.array(list(s))
         self.alphabet, self.counter = np.unique(self.s, return_counts=True)
@@ -71,7 +71,7 @@ class sabwt():
 
 if __name__ == "__main__":
     s = "mmiissiissiippii$"
-    b = sabwt(s)
+    b = isbwt(s)
     print(b.stypes)
     print(b.LMS)
     print(b.get_suffixes())
