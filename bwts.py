@@ -1,11 +1,14 @@
-class bwts():
+from memory_profiler import profile
+
+
+class bwts:
     def __init__(self, s):
         self.s = s
 
     def lf_duval(self):
         i = 0
         factors = []
-        while (i < len(self.s)):
+        while i < len(self.s):
             j = i + 1
             k = i
             while j < len(self.s) and self.s[k] <= self.s[j]:
@@ -15,7 +18,7 @@ class bwts():
                     k += 1
                 j += 1
             while i <= k:
-                factors.append(self.s[i:(i + j - k)])
+                factors.append(self.s[i : (i + j - k)])
                 i += j - k
         return factors
 
@@ -27,8 +30,9 @@ class bwts():
                 ret.append(factor[-idx:] + factor[:-idx])
         return ret
 
+    @profile
     def transform(self):
-        return ''.join(map(lambda x: x[-1], sorted(self.lf_conjugates())))
+        return "".join(map(lambda x: x[-1], sorted(self.lf_conjugates())))
 
     def sorted_keys(self):
         transformed = self.transform()
@@ -65,4 +69,4 @@ class bwts():
 
     def inverse(self):
         cycles = self.find_cycles()
-        return ''.join(map(lambda i: self.s[i], sum(cycles, [])))
+        return "".join(map(lambda i: self.s[i], sum(cycles, [])))

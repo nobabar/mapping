@@ -1,7 +1,10 @@
 import numpy as np
 
 
-class bwt():
+from memory_profiler import profile
+
+
+class bwt:
     def __init__(self, s):
         self.s = np.array(list(s), dtype=np.unicode_)
         self.transformed = []
@@ -9,12 +12,13 @@ class bwt():
         self.alpha = {}
 
     def calc_matrix(self):
-        s = np.append(self.s, '$')
+        s = np.append(self.s, "$")
         matrix = np.empty([len(s), len(s)], dtype=np.unicode_)
         for i in range(len(s)):
-            matrix[i] = np.concatenate([s[i:len(s)], s[0:i]])
+            matrix[i] = np.concatenate([s[i : len(s)], s[0:i]])
         return matrix[matrix[:, 0].argsort()]
 
+    @profile
     def transform(self):
         self.transformed = self.calc_matrix()[:, -1]
         return self.transformed
