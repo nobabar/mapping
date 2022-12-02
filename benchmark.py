@@ -106,5 +106,6 @@ if __name__ == "__main__":
         # plt.legend(loc="upper right")reps
         # plt.savefig(f"benchmark_{length}.svg", format="svg")
 
-    with open("runtimes.json", "w") as fp:
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    with open(f"runtimes_{timestr}.json", "w") as fp:
         json.dump(runtimes, fp)
