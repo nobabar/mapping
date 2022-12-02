@@ -21,6 +21,7 @@ parser.add_argument(
     "--methods",
     nargs="+",
     default=["bwt", "bwts", "isbwt", "sabwt"],
+    choices=["bwt", "bwts", "isbwt", "sabwt"],
     help="methods to benchmark",
 )
 parser.add_argument(
@@ -33,11 +34,18 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-r",
-    "--reps",
+    "-n",
+    "--nreps",
     type=int,
     default=100,
     help="number of repetitions for each sequence length",
+)
+
+parser.add_argument(
+    "-r",
+    "-runtime",
+    action="store_true",
+    help="calculate and save runtimes",
 )
 
 
@@ -88,24 +96,26 @@ if __name__ == "__main__":
                 runtimes[length][method]["timepoints"]
             )
 
-        # myrange = (0, max(runtimes[length]["bwt"]["timepoints"]) * 1.1)
+        if args.runtime:
+            myrange = (0, max(runtimes[length]["bwt"]["timepoints"]) * 1.1)
 
-        # plt.figure()
+            plt.figure()
 
-        # for method in methods:
-        #     plt.hist(
-        #         runtimes[length][method]["timepoints"],
-        #         bins=100,
-        #         alpha=0.5,
-        #         edgecolor="black",
-        #         linewidth=1.2,
-        #         label=method,
-        #         range=myrange,
-        #     )
+            for method in args.methods:
+                plt.hist(
+                    runtimes[length][method]["timepoints"],
+                    bins=100,
+                    alpha=0.5,
+                    edgecolor="black",
+                    linewidth=1.2,
+                    label=method,
+                    range=myrange,
+                )
 
-        # plt.legend(loc="upper right")reps
-        # plt.savefig(f"benchmark_{length}.svg", format="svg")
+            plt.legend(loc="upper right")
+            plt.savefig(f"benchmark_{length}.svg", format="svg")
 
-    timestr = time.strftime("%Y%m%d-%H%M%S")
-    with open(f"runtimes_{timestr}.json", "w") as fp:
-        json.dump(runtimes, fp)
+    if args.runtime:
+        timestr = time.strftime("%Y%m%d-%H%M%S")
+        with open(f"runtimes_{timestr}.json", "w") as fp:
+            json.dump(runtimes, fp)
