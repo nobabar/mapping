@@ -1,9 +1,6 @@
 import numpy as np
 
 
-from memory_profiler import profile
-
-
 class isbwt:
     def __init__(self, s):
         self.s = np.array(list(s))
@@ -73,7 +70,6 @@ class isbwt:
 
         return SA
 
-    @profile
     def transform(self):
         SA = self.induce_LMS()
         last_index = list(map(lambda i: (i + len(self.s) - 1) % len(self.s), SA))

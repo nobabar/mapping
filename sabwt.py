@@ -1,9 +1,6 @@
 import numpy as np
 
 
-from memory_profiler import profile
-
-
 class sabwt:
     def __init__(self, s):
         self.s = s
@@ -14,10 +11,10 @@ class sabwt:
     def calc_suffix_array(self):
         return sorted(range(len(self.s)), key=lambda i: self.s[i:])
 
-    @profile
     def transform(self):
         sa = self.calc_suffix_array()
-        last_index = list(map(lambda i: (i + len(self.s) - 1) % len(self.s), sa))
+        last_index = list(
+            map(lambda i: (i + len(self.s) - 1) % len(self.s), sa))
         self.transformed = np.array(list(self.s))[last_index]
         return self.transformed
 

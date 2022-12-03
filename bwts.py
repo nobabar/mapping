@@ -1,6 +1,3 @@
-from memory_profiler import profile
-
-
 class bwts:
     def __init__(self, s):
         self.s = s
@@ -30,7 +27,6 @@ class bwts:
                 ret.append(factor[-idx:] + factor[:-idx])
         return ret
 
-    @profile
     def transform(self):
         return "".join(map(lambda x: x[-1], sorted(self.lf_conjugates())))
 
