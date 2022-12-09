@@ -1,6 +1,7 @@
 setwd(this.path::here())
 rm(list = ls())
 
+library(cowplot)
 library(dplyr)
 library(ggbreak)
 library(ggplot2)
@@ -29,7 +30,7 @@ memory_plot <- ggplot(memory_df, aes(x = sequence_length, y = memory_usage,
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   ylim(60, 2000) +
-  scale_y_cut(breaks = c(75, 200), which = 3, scales = 2) +
+  scale_y_cut(breaks = c(75, 250), which = 3, scales = 2) +
   xlab("Length of the original sequence") +
   ylab("Memory usage (in MiB)") +
   theme_bw()
@@ -86,9 +87,6 @@ for (i in seq(length(results_files))){
                                     results_files[i]))))
   detailed_memory_df <- rbind(detailed_memory_df, newdf)
 }
-
-# set timepoints to seconds
-detailed_memory_df$timepoint <- detailed_memory_df$timepoint / 100
 
 detailed_memory_df %>%
   filter(sequence_length <= 1000) %>%
