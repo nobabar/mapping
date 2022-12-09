@@ -1,6 +1,6 @@
-AlgoArray=("bwts" "isbwt" "sabwt")
+AlgoArray=("bwt" "bwts" "isbwt" "sabwt")
 
-SequenceArray=(100 1000 10000 100000)
+SequenceArray=(10 100 1000 10000)
 
 for i in "${AlgoArray[@]}"
 do
