@@ -9,7 +9,7 @@ library(grid)
 library(gridExtra)
 library(rjson)
 
-options(scipen=100000)
+options(scipen=1000000)
 
 # Global memory plots ----
 
@@ -35,7 +35,7 @@ memory_plot <- ggplot(memory_df, aes(x = sequence_length, y = memory_usage,
   ylab("Memory usage (in MiB)") +
   theme_bw()
 
-ggsave("results/memory_plot.svg", memory_plot)
+ggsave("figures/memory_plot.svg", memory_plot)
 
 # Global runtime plots ----
 
@@ -67,7 +67,7 @@ runtime_plot <- ggplot(runtimes_df, aes(x = sequence_length, y = runtime,
   theme_bw() +
   theme(legend.position = "top")
 
-ggsave("results/runtime_plot.svg", runtime_plot)
+ggsave("figures/runtime_plot.svg", runtime_plot)
 
 # Detailed memory plot ----
 
@@ -129,6 +129,18 @@ detailed_memory_df %>%
   } %>%
   { . ->> detailed_memory_plot_100000 }
 
+detailed_memory_df_isbwt_1000000 <- read.csv("results/mprofrun_isbwt_1000000.txt", skip=1, sep=" ", header = FALSE)[-1]
+colnames(detailed_memory_df_isbwt_1000000) <- c("memory_usage", "timepoint")
+detailed_memory_df_isbwt_1000000$timepoint <- detailed_memory_df_isbwt_1000000$timepoint - detailed_memory_df_isbwt_1000000$timepoin[1]
+
+detailed_memory_plot_1000000 <- ggplot(detailed_memory_df_isbwt_1000000, aes(x = timepoint, y = memory_usage)) +
+  geom_line(color = "#00BFC4")+
+  theme_bw() +
+  facet_grid("1000000") +
+  theme(legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
 legend <- get_legend(
   detailed_memory_plot + theme(legend.box.margin = margin(0, 0, 0, 12))
 )
@@ -136,10 +148,10 @@ legend <- get_legend(
 y.grob <- textGrob("Memory usage (in MiB)", rot=90)
 x.grob <- textGrob("Time (in seconds)")
 
-bottom_plot <- detailed_memory_plot_10000 + detailed_memory_plot_100000
-plots <- plot_grid(detailed_memory_plot + theme(legend.position="none"), bottom_plot, ncol = 1)
+mid_plot <- detailed_memory_plot_10000 + detailed_memory_plot_100000
+plots <- plot_grid(detailed_memory_plot + theme(legend.position="none"), mid_plot, detailed_memory_plot_1000000, ncol = 1)
 plots <- plot_grid(plots, legend, rel_widths = c(3, .4))
 
 g <- grid.arrange(arrangeGrob(plots, left = y.grob, bottom = x.grob))
 
-ggsave(filename = "results/detailed_memory_plot.svg", g)
+ggsave(filename = "figures/detailed_memory_plot.svg", g)
