@@ -4,8 +4,6 @@ import sys
 import time
 from random import choice
 
-
-import matplotlib.pyplot as plt
 import numpy as np
 from memory_profiler import profile
 
@@ -57,11 +55,43 @@ parser.add_argument(
 )
 
 
-def generate_seq(length):
-    return "".join(choice("ACGT") for _ in range(length))
+def generate_seq(n):
+    """
+    Generate a random DNA sequence of length n
+
+    Parameters
+    ----------
+    n : int
+        length of the sequence
+
+    Returns
+    -------
+    str
+        random DNA sequence
+    """
+    return "".join(choice("ACGT") for _ in range(n))
 
 
 def benchmark_transform(n, rep, f, mprofile):
+    """
+    Benchmark the transform function of a BWT class
+
+    Parameters
+    ----------
+    n : int
+        length of the sequence
+    rep : int
+        number of repetitions
+    f : function
+        transform function of a BWT class
+    mprofile : bool
+        whether to calculate memory profile
+
+    Returns
+    -------
+    list
+        list of runtimes
+    """
     print(f"Benchmarking {f.__name__} for {rep} sequences of length {n}")
     timepoints = []
     start_time = time.time()
@@ -106,25 +136,6 @@ if __name__ == "__main__":
             runtimes[length][algo]["std"] = np.std(
                 runtimes[length][algo]["timepoints"]
             )
-
-        # if args.runtime:
-        #     myrange = (0, max(max(runtimes[length][algo]["timepoints"]) for algo in args.algorithm) * 1.1)
-
-        #     plt.figure()
-
-        #     for algo in args.algorithm:
-        #         plt.hist(
-        #             runtimes[length][algo]["timepoints"],
-        #             bins=100,
-        #             alpha=0.5,
-        #             edgecolor="black",
-        #             linewidth=1.2,
-        #             label=algo,
-        #             range=myrange,
-        #         )
-
-        #     plt.legend(loc="upper right")
-        #     plt.savefig(f"benchmark_{length}.svg", format="svg")
 
     if args.runtime:
         timestr = time.strftime("%Y%m%d-%H%M%S")
