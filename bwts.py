@@ -98,7 +98,7 @@ class bwts:
             sorted indices
         """
         transformed = self.transform()
-        return [x for x in sorted(range(len(transformed)), key=transformed.__getitem__)]
+        return sorted(range(len(transformed)), key=transformed.__getitem__)
 
     # def map(self):
     #     sorted_transformed = np.sort(self.transformed)
